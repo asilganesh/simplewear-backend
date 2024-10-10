@@ -2,6 +2,8 @@ require("dotenv").config();
 const connectDb = require("./config/db");
 const express = require("express");
 const productsRoutes = require("./routes/productsRoutes");
+const userRoutes = require('./routes/userRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 const app = express();
 const port = process.env.PORT;
@@ -12,13 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 
 connectDb();
 
-app
-  .get("/products", productsRoutes)
-  .get('/products/:id',productsRoutes)
-  .post("/addProduct", productsRoutes)
-  .put("/updateProduct/:id", productsRoutes)
-  .delete("/deleteProduct", productsRoutes);
+app.use(adminRoutes)
+app.use(userRoutes)
+app.use(productsRoutes)
+
 
 app.listen(port, () => {
-  console.log(`server is running on http://locashost/${port}`);
+    console.log(`server is running on http://locashost/${port}`);
 });
