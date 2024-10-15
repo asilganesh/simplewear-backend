@@ -1,12 +1,13 @@
 const express = require('express')
 const { getAllProducts, addProduct, updateProduct, deleteProduct, getProductById } = require('../controllers/productsController')
+const verifyToken = require('../middleware/authMiddleware')
 
 
 
 const router = express.Router()
 
 router
-    .get('/products', getAllProducts)
+    .get('/products',getAllProducts)
     .get('/products/:id',getProductById)
     .post('/addProduct', addProduct)
     .put('/updateProduct/:id', updateProduct)

@@ -2,9 +2,10 @@ const products = require("../models/Products");
 
 module.exports = {
   getAllProducts: async (req, res) => {
+    
     try {
       const data = await products.find();
-      res.status(200).json(data);
+      return res.status(200).json(data);
     } catch (err) {
       res
         .status(500)
@@ -18,9 +19,9 @@ module.exports = {
       const responseData = await products.findOne({ _id: id });
 
       if (!responseData) {
-        res.status(404).json({ message: "Product Not Fount" });
+        return res.status(404).json({ message: "Product Not Fount" });
       }
-      res.status(200).json({ responseData });
+      return res.status(200).json({ responseData });
     } catch (err) {
       res
         .status(500)
@@ -33,7 +34,7 @@ module.exports = {
       const data = req.body;
 
       const responseData = await products.create(data);
-      res.status(201).json({
+      return res.status(201).json({
         message: "Product added successfully",
         product: responseData,
       });
@@ -51,11 +52,11 @@ module.exports = {
 
       const responseData = await products.updateOne({ _id: id }, data);
       if (responseData.modifiedCount === 0) {
-        res
+        return res
           .status(404)
           .json({ message: "Product not fount or no changes made" });
       }
-      res
+      return res
         .status(200)
         .json({ message: "Product Updated Successfully", data: responseData });
     } catch (err) {
@@ -70,7 +71,7 @@ module.exports = {
       const data = req.body;
       const responseData = await products.deleteOne(data);
 
-      res
+      return res
         .status(200)
         .json({ message: "Product Deleted Successfully", data: responseData });
     } catch (err) {

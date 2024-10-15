@@ -1,5 +1,10 @@
 const Admin = require('../models/Admin')
 const bcrypt = require('bcrypt')
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
+
+
+
 
 module.exports = {
     registerAdmin: async (req, res) => {
@@ -11,7 +16,7 @@ module.exports = {
             const adminExists =  await Admin.findOne({mail: data.mail})
 
             if(adminExists){
-                res.status(401).json({message: "User Already exits"})
+              return  res.status(401).json({message: "User Already exits"})
             }
 
            const salt =  await bcrypt.genSalt(10)
@@ -23,7 +28,7 @@ module.exports = {
 
             const responseData = await Admin.create(data)
 
-            res.status(200).json("Registered Successfully")
+            return res.status(200).json("Registered Successfully")
 
         }
         catch (err) {
@@ -40,16 +45,23 @@ module.exports = {
             const admin = await Admin.findOne({ mail })
 
             if (!admin) {
-                res.status(400).json({ message: "Admin not found " })
+                return   res.status(400).json({ message: "Admin not found " })
             }
 
             const passMatch = await bcrypt.compare(password, admin.password)
 
             if (!passMatch) {
-                res.status(400).json("Ivalid Credentials")
+                return   res.status(400).json("Ivalid Credentials")
             }
 
-            res.status(200).json("Login Successful")
+            jwt.sign(userData, process.env.SECRET_KEY, (err,data) => {
+                if(err){
+                   return  res.json(err)
+                }
+                return res.status(200).json({ message: "Login Successful", token:data })
+
+            })
+
 
         }
         catch (err) {
