@@ -1,6 +1,7 @@
 require("dotenv").config();
 const connectDb = require("./config/db");
 const express = require("express");
+const cors =require('cors')
 const productsRoutes = require("./routes/productsRoutes");
 const userRoutes = require('./routes/userRoutes')
 const adminRoutes = require('./routes/adminRoutes')
@@ -11,6 +12,7 @@ const app = express();
 const port = process.env.PORT;
 
 //middle wares
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
