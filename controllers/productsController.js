@@ -2,12 +2,11 @@ const products = require("../models/Products");
 
 module.exports = {
   getAllProducts: async (req, res) => {
-    
+
     try {
-      const filters =req.query.filter || {}
-      const {sort} = req.query 
-     console.log(sort)
-      const data = await products.find(filters).sort(sort ? {price: sort.$eq } : null);
+      const filters = req.query.filter || {}
+      const { sort } = req.query
+      const data = await products.find(filters).sort(sort ? { price: sort.$eq } : null);
       return res.status(200).json(data);
     } catch (err) {
       res

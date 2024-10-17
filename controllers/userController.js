@@ -8,6 +8,7 @@ module.exports = {
 
         try {
             const data = req.body
+            console.log(data)
 
             const userExists = await User.findOne({ mail: data.mail })
 
@@ -56,7 +57,7 @@ module.exports = {
                 if(err){
                    return  res.json(err)
                 }
-                return res.status(200).json({ message: "Login Successful", token:data })
+                return res.status(200).json({ message: "Login Successful", userInfo:{userData, token:data} })
 
             })
 
