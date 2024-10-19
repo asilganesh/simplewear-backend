@@ -3,7 +3,7 @@ const cart = require("../models/Cart");
 module.exports = {
     getItemsFromCart: async (req, res) => {
         try {
-            const { userId } = req.body;
+            const { userId } = req.query;
 
             const responseData = await cart.find({ userId });
 
@@ -21,7 +21,7 @@ module.exports = {
         try {
             const data = req.body;
 
-            const userCart = await cart.find({ userId: data.userId });
+
 
             const productExists = await cart.findOne({
                 userId: data.userId,
@@ -29,19 +29,20 @@ module.exports = {
                 productSize: data.productSize
             });
 
-            if (!userCart.length) {
-                const responseData = await cart.create(data);
-                return res.status(201).json({
-                    message: "Cart created and item added successfully",
-                    data: responseData
-                });
-            }
+            // if (!userCart.length) {
+            //     const responseData = await cart.create(data);
+            //     return res.status(201).json({
+            //         message: "Cart created and item added successfully",
+            //         data: responseData
+            //     });
+            // }
 
             if (!productExists) {
                 const responseData = await cart.create(data);
+                const updatedCart = await cart.find({ userId: data.userId });
                 return res.status(201).json({
                     message: "Item added to cart successfully",
-                    data: responseData
+                    data: updatedCart
                 });
             }
 
@@ -50,15 +51,19 @@ module.exports = {
                 totalPrice: productExists.productPrice * (productExists.productQuantity + 1)
             };
 
-            const responseData = await cart.findOneAndUpdate(
+            const updatedCartItem = await cart.findByIdAndUpdate(
                 { _id: productExists._id },
                 updatedData,
                 { new: true }
             );
 
+
+
+            const updatedCart = await cart.find({ userId: data.userId });
+
             return res.status(201).json({
                 message: "Item quantity updated successfully",
-                data: responseData
+                data: updatedCart
             });
 
         } catch (err) {
@@ -105,21 +110,22 @@ module.exports = {
 
     deleteItemFromCart: async (req, res) => {
         try {
-            const { cartId } = req.body;
+            const { cartId,userId } = req.body;
             console.log(cartId);
             const responseData = await cart.findByIdAndDelete(cartId);
-
             if (!responseData) {
                 res
                     .status(404)
                     .json({ message: "No item found with the provided Cart ID" });
             }
 
+            const updatedCart = await cart.find({ userId });
+
             res
                 .status(200)
-                .json({ message: "Item Deleted from cart", data: responseData });
+                .json({ message: "Item Deleted from cart", data: updatedCart });
         } catch (err) {
-            res.status(500).json({ message: "Error Ocurred", error: err.cause });
+            res.status(500).json({ message: "Error Ocurred", error: err });
         }
     },
 };
