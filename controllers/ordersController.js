@@ -6,14 +6,14 @@ module.exports = {
     getOrdersList: async(req,res) => {
 
         try{
-            const userId = req.body.userId
+            const userId = req.query.userId
             const responseData = await orders.find({userId})
 
             if(!responseData.length){
                 return res.status(400).json("No orders found")
             }
 
-            res.status(200).json({message:"Fetched orders successfully",data: responseData})
+           return  res.status(200).json({message:"Fetched orders successfully",data: responseData})
 
         }
         catch(err) {

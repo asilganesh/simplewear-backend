@@ -73,7 +73,7 @@ module.exports = {
 
     },
 
-    updateCart: async (req, res) => {
+    updateItemSize: async (req, res) => {
         try {
             const data = req.body;
 
@@ -88,10 +88,10 @@ module.exports = {
                 const newSize = { productSize: data.productSize }
                 const responseData = await cart.findOneAndUpdate({ _id: data._id }, newSize,
                     { new: true });
-                return res.status(201).json({
-                    message: "Updated Item successfully",
-                    data: responseData
-                });
+                const updatedCart = await cart.find({ userId: data.userId });
+
+                return res.status(200).json({ message: "updated Item Successfully", data: updatedCart })
+
             }
 
             const updatedData = { ...productExists.toObject(), productQuantity: productExists.productQuantity + data.productQuantity, totalPrice: productExists.totalPrice + data.totalPrice }
@@ -100,7 +100,9 @@ module.exports = {
 
             if (responseData) {
                 const removeItem = await cart.findByIdAndDelete({ _id: data._id });
-                return res.status(200).json("updated Item Successfully")
+                const updatedCart = await cart.find({ userId: data.userId });
+
+                return res.status(200).json({ message: "updated Item Successfully", data: updatedCart })
             }
 
         } catch (err) {
@@ -108,9 +110,51 @@ module.exports = {
         }
     },
 
+    updateItemQuantity: async (req, res) => {
+
+        try {
+            const { cartId, userId, newQuantity } = req.body
+
+            if (!cartId) {
+                return res.status(404).json("Please provide the cartID")
+            }
+
+            if (!newQuantity) {
+                return res.status(404).json("Please provide the newQuantity")
+            }
+
+            const cartItem = await cart.find({ _id: cartId })
+
+            const updatedData = { productQuantity: newQuantity, totalPrice: cartItem[0].productPrice * newQuantity }
+
+            const responseData = await cart.findByIdAndUpdate({ _id: cartId }, updatedData)
+
+            const updatedCart = await cart.find({ userId });
+
+            return res.status(200).json({ message: " Updated quantity successfully", data: updatedCart })
+
+        }
+        catch (err) {
+            res.status(500).json({ message: "Error Ocurred", error: err.message })
+        }
+    },
+
+    clearCart: async(req,res) => {
+
+        try{
+            const {userId}=req.body
+            const responseData = await cart.deleteMany({userId})
+            return res.status(200).json({message: "Clear Cart", data: responseData})
+
+        }
+        catch(err) {
+            res.status(500).json({message: "Error ocurred", error: err.message})
+        }
+    },
+
     deleteItemFromCart: async (req, res) => {
         try {
-            const { cartId,userId } = req.body;
+            const { cartId, userId } = req.body;
             console.log(cartId);
             const responseData = await cart.findByIdAndDelete(cartId);
             if (!responseData) {
