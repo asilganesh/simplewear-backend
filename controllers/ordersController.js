@@ -7,7 +7,7 @@ module.exports = {
 
         try{
             const userId = req.query.userId
-            const responseData = await orders.find({userId})
+            const responseData = await orders.find({userId}).sort({orderDate:-1})
 
             if(!responseData.length){
                 return res.status(400).json("No orders found")
@@ -26,15 +26,13 @@ module.exports = {
 
         try{
             const userId = req.body.userId
-
+            console.log(req.body)
             const userCart = await cart.find({userId})
-
             if (!userCart.length) {
                 return res.status(400).json({ message: "Cart is empty" });
             }
 
            
-
             const orderData = {
                 userId: userId,
                 products: userCart.map(item => ({
@@ -46,8 +44,10 @@ module.exports = {
                     totalPrice: item.totalPrice,
                     productImage: item.productImage
                 })),
+                deliveryDetails: req.body.deliveryDetails,
                 totalAmount: req.body.totalAmount,
-                paymentMethod: req.body.paymentMethod
+                paymentMethod: req.body.paymentMethod,
+                paymentStatus:req.body.paymentStatus
 
             };
 

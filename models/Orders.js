@@ -21,14 +21,25 @@ const orderSchema = new mongoose.Schema({
             productImage: Array
         }
     ],
+    deliveryDetails: {
+        fname: String,
+        lname: String,
+        email: String,
+        street: String,
+        city: String,
+        state: String,
+        zipcode: Number,
+        country: String,
+        phone: Number
+    },
     totalAmount: {
         type: Number,
         required: true,
     },
     orderStatus: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'],
-        default: 'Pending',
+        enum: [ 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'],
+        default: 'Confirmed',
     },
     paymentStatus: {
         type: String,
@@ -37,7 +48,8 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['Credit Card', 'Debit Card', 'Net Banking', 'UPI', 'COD'],
+        // enum: ['Credit Card', 'Debit Card', 'Net Banking', 'UPI', 'COD'],
+        enum: ['RAZORPAY', 'COD'],
         required: true,
     },
     orderDate: {

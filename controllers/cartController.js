@@ -144,7 +144,8 @@ module.exports = {
         try{
             const {userId}=req.body
             const responseData = await cart.deleteMany({userId})
-            return res.status(200).json({message: "Clear Cart", data: responseData})
+            console.log(responseData)
+            return res.status(200).json({message: "Clear Cart", data: []})
 
         }
         catch(err) {
