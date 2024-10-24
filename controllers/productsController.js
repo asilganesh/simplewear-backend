@@ -9,6 +9,7 @@ module.exports = {
       const data = await products.find(filters).sort(sort ? { price: sort.$eq } : null);
       return res.status(200).json(data);
     } catch (err) {
+      console.error('Cause:', err.cause);
       res
         .status(500)
         .json({ message: "Error fetching products", error: err.message });
@@ -25,6 +26,7 @@ module.exports = {
       }
       return res.status(200).json({ responseData });
     } catch (err) {
+      console.error('Cause:', err.cause);
       res
         .status(500)
         .json({ messasge: "Error fetching Product", error: err.message });
@@ -41,6 +43,7 @@ module.exports = {
         product: responseData,
       });
     } catch (err) {
+      console.error('Cause:', err.cause);
       res
         .status(500)
         .json({ message: "Error adding the product", error: err.message });
@@ -62,6 +65,7 @@ module.exports = {
         .status(200)
         .json({ message: "Product Updated Successfully", data: responseData });
     } catch (err) {
+      console.error('Cause:', err.cause);
       res
         .status(500)
         .json({ message: "Error Updating the product", error: err.message });
@@ -77,6 +81,7 @@ module.exports = {
         .status(200)
         .json({ message: "Product Deleted Successfully", data: responseData });
     } catch (err) {
+      console.error('Cause:', err.cause);
       res
         .status(500)
         .json({ message: "Product Deletion Failed", error: err.message });

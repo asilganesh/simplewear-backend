@@ -32,6 +32,7 @@ module.exports = {
 
         }
         catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error Ocurred, Please try again", error: err.message })
         }
 
@@ -54,7 +55,15 @@ module.exports = {
                 return   res.status(400).json("Ivalid Credentials")
             }
 
-            jwt.sign(userData, process.env.SECRET_KEY, (err,data) => {
+            adminData = {
+                id: admin._id,
+                name: admin.name,
+                mail: admin.mail,
+                type: admin.type
+            }
+
+
+            jwt.sign(adminData, process.env.SECRET_KEY, (err,data) => {
                 if(err){
                    return  res.json(err)
                 }
@@ -65,7 +74,9 @@ module.exports = {
 
         }
         catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error Ocurred", error: err.message })
+
         }
 
 

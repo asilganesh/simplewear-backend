@@ -24,6 +24,7 @@ module.exports = {
 
         }
         catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error ocurred", error: err.message })
         }
     },
@@ -38,6 +39,7 @@ module.exports = {
 
         }
         catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error ocurred", error: err.message })
         }
     }

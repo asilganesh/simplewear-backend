@@ -3,10 +3,29 @@ const cart = require('../models/Cart')
 
 module.exports = {
 
+    getAllOrders: async(req,res) => {
+
+        try{
+            const ordersData = await orders.find().sort({orderDate:-1})
+            if(!ordersData) {
+                return res.status(400).json("No orders found")
+            }
+            return res.status(200).json(ordersData)
+        }
+        catch(err) {
+            console.error('Cause:', err.cause);
+            return res.status(500).json({message: "Error Ocurred", error: err.message})
+        }
+    },
+
     getOrdersList: async(req,res) => {
 
         try{
             const userId = req.query.userId
+
+            if(!userId){
+               return  res.status(400).json("please provide the useid")
+            }
             const responseData = await orders.find({userId}).sort({orderDate:-1})
 
             if(!responseData.length){
@@ -17,6 +36,7 @@ module.exports = {
 
         }
         catch(err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({message: "Error ocurred", error : err.message})
         }
 
@@ -32,7 +52,7 @@ module.exports = {
                 return res.status(400).json({ message: "Cart is empty" });
             }
 
-           
+           console.log(req.body.deliveryDetails)
             const orderData = {
                 userId: userId,
                 products: userCart.map(item => ({
@@ -56,6 +76,7 @@ module.exports = {
 
         }
         catch(err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({message: "Error Ocurred", error: err.message})
         }
     },
@@ -67,7 +88,7 @@ module.exports = {
             const orderId = req.body._id
             const orderStatus = req.body.orderStatus
             
-            if(ordrStatus === 'Delivered'){
+            if(orderStatus === 'Delivered'){
                 paymentStatus = 'Completed'
             }
 
@@ -76,10 +97,15 @@ module.exports = {
                 { orderStatus: orderStatus }, 
                 { new: true } 
             );          
-              res.status(200).json({message: "Updted status successfully", data: responseData})
+            const ordersData = await orders.find().sort({orderDate:-1})
+            if(!ordersData) {
+                return res.status(400).json("No orders found")
+            }
+            return res.status(200).json(ordersData)
 
         }
         catch(err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({message: "Error Ocurred", error: err.message})
         }
     },

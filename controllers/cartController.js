@@ -13,7 +13,9 @@ module.exports = {
 
             res.status(200).json(responseData);
         } catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error Ocurred", error: err.message });
+
         }
     },
 
@@ -67,6 +69,8 @@ module.exports = {
             });
 
         } catch (err) {
+            console.error('Cause:', err.cause);
+
             res.status(500).json({ message: "Error occurred", error: err.message });
         }
 
@@ -106,6 +110,7 @@ module.exports = {
             }
 
         } catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error occurred", error: err.message });
         }
     },
@@ -135,6 +140,7 @@ module.exports = {
 
         }
         catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error Ocurred", error: err.message })
         }
     },
@@ -149,6 +155,7 @@ module.exports = {
 
         }
         catch(err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({message: "Error ocurred", error: err.message})
         }
     },
@@ -170,6 +177,7 @@ module.exports = {
                 .status(200)
                 .json({ message: "Item Deleted from cart", data: updatedCart });
         } catch (err) {
+            console.error('Cause:', err.cause);
             res.status(500).json({ message: "Error Ocurred", error: err });
         }
     },
