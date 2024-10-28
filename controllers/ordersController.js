@@ -87,7 +87,7 @@ module.exports = {
 
             const orderId = req.body._id
             const orderStatus = req.body.orderStatus
-            
+          
             if(orderStatus === 'Delivered'){
                 paymentStatus = 'Completed'
             }
@@ -97,6 +97,8 @@ module.exports = {
                 { orderStatus: orderStatus }, 
                 { new: true } 
             );          
+
+       
             const ordersData = await orders.find().sort({orderDate:-1})
             if(!ordersData) {
                 return res.status(400).json("No orders found")
