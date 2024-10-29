@@ -11,7 +11,7 @@ const orderRoutes = require('./routes/orderRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
 
 const app = express();
-const port = process.env.PORT;
+// const port = process.env.PORT;
 
 //middle wares
 app.use(cors())
@@ -29,9 +29,9 @@ app.use(orderRoutes)
 app.use(paymentRoutes)
 
 
-app.listen(port, () => {
-    console.log(`server is running on http://locashost/${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`server is running on http://locashost/${port}`);
+// });
 
 
 module.exports = app;
