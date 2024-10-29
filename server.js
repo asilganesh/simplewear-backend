@@ -32,3 +32,6 @@ app.use(paymentRoutes)
 app.listen(port, () => {
     console.log(`server is running on http://locashost/${port}`);
 });
+
+
+module.exports = app;
