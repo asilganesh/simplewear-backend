@@ -67,7 +67,8 @@ module.exports = {
                 if(err){
                    return  res.json(err)
                 }
-                return res.status(200).json({ message: "Login Successful", token:data })
+                adminData = {...adminData,token:data}
+                return res.status(200).json({ message: "Login Successful", data:adminData })
 
             })
 

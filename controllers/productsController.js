@@ -5,6 +5,7 @@ module.exports = {
 
     try {
       const filters = req.query.filter || {}
+      console.log(req.query)
       const { sort } = req.query
       const data = await products.find(filters).sort(sort ? { price: sort.$eq } : null);
       return res.status(200).json(data);
@@ -74,12 +75,21 @@ module.exports = {
 
   deleteProduct: async (req, res) => {
     try {
-      const data = req.body;
-      const responseData = await products.deleteOne(data);
+      console.log(req.body)
+      const { productId } = req.body;
+      const responseData = await products.deleteOne({ _id: productId });
+
+      console.log(responseData)
+
+      if (!responseData.deletedCount) {
+        return res.status(404).json({ message: "Product not found" })
+      }
+
+      const updatedData = await products.find()
 
       return res
         .status(200)
-        .json({ message: "Product Deleted Successfully", data: responseData });
+        .json({ message: "Product Deleted Successfully", data: updatedData });
     } catch (err) {
       console.error('Cause:', err.cause);
       res

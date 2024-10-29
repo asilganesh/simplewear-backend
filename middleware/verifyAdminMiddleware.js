@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken')
 
 const verifyAdmin = (req,res,next) => {
 
-  
+  console.log(req.headers)
     const authorization = req.headers['authorization']
     
-   
+   console.log(authorization)
     const token = authorization && authorization.split(" ")[1]
-
+console.log(token)
     if(!token) {
       return   res.status(401).json({message: "Token not found"})
     }

@@ -8,7 +8,7 @@ router
 .get('/getAllOrders',verifyAdmin,getAllOrders)
 .get('/getOrders',verifyToken,getOrdersList)
 .post('/addOrders',addOrders)
-.put('/updateOrder',updateOrdersList)
+.put('/updateOrder',verifyAdmin,updateOrdersList)
 
 
 module.exports = router
